@@ -1,6 +1,5 @@
 import { ArrowRightIcon } from 'lucide-react';
 import type { Metadata } from 'next';
-import { setRequestLocale } from 'next-intl/server';
 
 import { MainLayout } from '@/components/layouts';
 import { Button } from '@/components/ui/button';
@@ -26,9 +25,7 @@ export async function generateMetadata({ params }: HomePageProps): Promise<Metad
   });
 }
 
-export default async function HomePage({ params }: HomePageProps) {
-  const { locale } = await params;
-  setRequestLocale(toLocale(locale));
+export default async function HomePage() {
   const { t } = await useTranslationsServer('common.home');
 
   return (

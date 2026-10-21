@@ -59,7 +59,7 @@ src/proxy.ts        next-intl locale negotiation (Next 16 renamed middleware.ts 
 - Alias `@/*` is `src/*`. Single quotes, 2 spaces, 120 columns, formatted by Biome (not Prettier or ESLint).
 - Shared types go in `type.ts`, enums in `enum.ts`, constants in `const.ts`. A feature may keep its own next to its code.
 - Components `PascalCase.tsx`, hooks `useCamelCase.ts`, utils `lowercase.ts`, tests in `__tests__/`.
-- Pages in `src/app` are thin: build metadata, set the request locale, render a component from `src/modules`.
+- Pages in `src/app` are thin: build metadata and render a component from `src/modules`. Locale is resolved centrally via `next/root-params` in `src/i18n/request.ts`.
 - Prefer Server Components. Add `'use client'` only where state, effects or browser APIs are needed.
 - Do not add dependencies unless the task needs them. Check whether the repo already has an equivalent.
 - Do not leave debug code, commented-out code, or `any` without a reason.
@@ -71,6 +71,7 @@ src/proxy.ts        next-intl locale negotiation (Next 16 renamed middleware.ts 
 - New namespace or locale: register it in `src/messages/index.ts` (and `LOCALES`, `LOCALE_LABELS`, `LOCALE_OG` in `src/i18n/routing.ts` for a locale).
 - Use `Link`, `useRouter`, `usePathname` from `@/i18n/navigation`, not `next/navigation`.
 - Do not export `useTranslationsServer` from the `@/hooks` barrel: it would pull `next-intl/server` into client bundles.
+- Pass an explicit locale to server translations in Route Handlers and Server Actions; `next/root-params` is unavailable in those contexts.
 
 ## API layer
 
@@ -83,7 +84,7 @@ src/proxy.ts        next-intl locale negotiation (Next 16 renamed middleware.ts 
 
 - Every page exports `generateMetadata` that returns `buildMetadata({ locale, path, title, description, noIndex? })` from `src/lib/seo.ts`. Do not hand-write `openGraph` or `alternates`: Next replaces nested objects, so partial ones lose data.
 - Indexable pages must be added to `INDEXABLE_ROUTES` in `src/constants/routes.ts` (feeds `sitemap.ts`). Operational or private pages pass `noIndex: true`.
-- Non-production environments are `noindex` automatically. OG and Twitter images live at `src/app/opengraph-image.tsx` and `twitter-image.tsx`, outside `[locale]`.
+- Non-production environments are `noindex` automatically. OG and Twitter image route handlers live in `src/app/opengraph-image/` and `src/app/twitter-image/`, outside `[locale]`.
 
 ## shadcn/ui and Storybook
 
@@ -100,7 +101,8 @@ Only three variables exist: `NEXT_PUBLIC_APP_ENV`, `NEXT_PUBLIC_APP_URL`, `NEXT_
 
 ## Dependencies and tooling gotchas
 
-- TypeScript 7: incremental builds ignore JSON edits, so `type-check` runs with `--incremental false`. Do not remove that flag. In an editor, "Restart TS Server" clears stale translation errors.
+- Use `bignumber.js` for precision-sensitive decimal arithmetic (especially money), not JavaScript floating-point operators. Construct values from decimal strings, keep results as BigNumber or strings, and choose division precision and rounding explicitly per domain. Never mutate global BigNumber configuration; use `BigNumber.clone` for domain-specific settings. Check division by zero and validate inputs at the boundary. `src/utils/number.ts` formatting helpers return `number` or display text and are not a substitute for exact arithmetic.
+- TypeScript 7: incremental builds ignore JSON edits, so `type-check` runs with `--incremental false`. Do not remove that flag. It also runs `next typegen` first so a fresh checkout has the generated `next/root-params` types. In an editor, "Restart TS Server" clears stale translation errors.
 - pnpm 12 rejects packages published less than a day ago and blocks install scripts. New build scripts need an entry in `pnpm-workspace.yaml` (`allowBuilds`). If a fresh release is rejected, pin the previous version. `@types/node` stays on the Node major used at runtime (22).
 - `next build` rewrites `tsconfig.json` when it disagrees with Next's required settings; keep the committed file as is.
 - Biome is relaxed only for `src/components/ui/**`, `src/app/**` and `src/lib/**` (see `biome.json`), do not widen it.

@@ -1,5 +1,6 @@
 import { EMPTY_PLACEHOLDER, NUMBER_FORMAT_LOOK_UP } from '@/constants/const';
 import type { RoundType } from '@/types/type';
+import BigNumber from 'bignumber.js';
 
 type Numeric = number | string | null | undefined;
 
@@ -17,8 +18,12 @@ export const range = (start: number, end: number): number[] => {
 };
 
 export const roundTo = (value: number, digits = 2, type: RoundType = 'round'): number => {
-  const factor = 10 ** digits;
-  return Math[type](value * factor) / factor;
+  if (!Number.isFinite(value) || !Number.isInteger(digits) || digits < 0 || digits > 100) {
+    const factor = 10 ** digits;
+    return Math[type](value * factor) / factor;
+  }
+  const rounding = { round: BigNumber.ROUND_HALF_CEIL, floor: BigNumber.ROUND_FLOOR, ceil: BigNumber.ROUND_CEIL };
+  return new BigNumber(value).decimalPlaces(digits, rounding[type]).toNumber();
 };
 
 /** `1234567` -> `1,234,567` */
@@ -49,7 +54,7 @@ export const formatCurrency = (value: Numeric, currency = 'USD', locale = 'en-US
 /** `0.256` -> `25.6%` (pass `isRatio=false` when the value is already a percentage) */
 export const formatPercent = (value: Numeric, digits = 2, isRatio = true): string => {
   if (value === null || value === undefined || value === '') return EMPTY_PLACEHOLDER;
-  const percent = isRatio ? toNumber(value) * 100 : toNumber(value);
+  const percent = isRatio ? new BigNumber(toNumber(value)).times(100).toNumber() : toNumber(value);
   return `${roundTo(percent, digits)}%`;
 };
 

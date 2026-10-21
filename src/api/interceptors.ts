@@ -44,10 +44,10 @@ const refreshAccessToken = (): Promise<string | null> => {
     } catch {
       store.clearSession();
       return null;
-    } finally {
-      refreshPromise = null;
     }
-  })();
+  })().finally(() => {
+    refreshPromise = null;
+  });
 
   return refreshPromise;
 };

@@ -1,3 +1,9 @@
+import type { Metadata } from 'next';
+
+import { siteConfig } from '@/config/site';
+
+export const metadata: Metadata = { metadataBase: new URL(siteConfig.appUrl) };
+
 // Fallback for URLs outside any locale segment (the locale layout is not available here).
 export default function RootNotFound() {
   return (

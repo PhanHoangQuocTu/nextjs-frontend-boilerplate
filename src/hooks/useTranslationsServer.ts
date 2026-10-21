@@ -7,7 +7,7 @@ import type { Namespace, Translator } from '@/types/translation';
  * Typed translations for **Server Components, `generateMetadata` and Route Handlers**.
  * Not exported from the `@/hooks` barrel so `next-intl/server` never reaches a client bundle.
  *
- * Inside `generateMetadata` pass the `locale` from `params` (the request locale is not set there).
+ * Pass `locale` explicitly in Route Handlers and Server Actions, where root params are unavailable.
  *
  * @example
  * const { t } = await useTranslationsServer('health');

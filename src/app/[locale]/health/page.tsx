@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { setRequestLocale } from 'next-intl/server';
 
 import { MainLayout } from '@/components/layouts';
 import { JsonLd } from '@/components/seo/JsonLd';
@@ -29,7 +28,6 @@ export async function generateMetadata({ params }: HealthPageProps): Promise<Met
 export default async function HealthPage({ params }: HealthPageProps) {
   const { locale } = await params;
   const currentLocale = toLocale(locale);
-  setRequestLocale(currentLocale);
   const [{ t }, { t: tc }] = await Promise.all([useTranslationsServer('health'), useTranslationsServer('common')]);
 
   return (

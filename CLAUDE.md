@@ -4,6 +4,7 @@
 
 ## Claude Code specifics
 
+- Follow the decimal arithmetic guidance in `AGENTS.md`: use `bignumber.js` for precision-sensitive calculations.
 - The shared rules above are the source of truth. Edit `AGENTS.md`, not this file, for anything that is not Claude-specific.
 - For work that touches several files (a new domain, a new locale, a new page), outline the plan first, then implement. Use the existing example (`src/api/posts`, `src/modules/Health`) as the template instead of designing from scratch.
 - Use the dedicated Read, Edit and Grep tools instead of `cat`, `sed` and `grep` in Bash. Search with the code index if `.codegraph/` exists.

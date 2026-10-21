@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 
@@ -14,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { webSiteJsonLd } from '@/lib/seo';
 import type { LayoutProps } from '@/types/type';
 import Providers from './providers';
+import '../../styles/globals.css';
 
 export async function generateMetadata({ params }: Pick<LayoutProps<{ locale: string }>, 'params'>): Promise<Metadata> {
   const { locale } = await params;
@@ -47,8 +47,6 @@ export default async function LocaleLayout({ children, params }: LayoutProps<{ l
 
   if (!hasLocale(routing.locales, locale)) notFound();
 
-  // Opt into static rendering for this locale.
-  setRequestLocale(locale);
   const { t } = await useTranslationsServer('common.seo', locale);
 
   return (

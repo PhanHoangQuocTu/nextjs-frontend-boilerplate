@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
   output: 'standalone',
   compress: true,
   poweredByHeader: false,
+  experimental: { globalNotFound: true },
   env: { APP_VERSION: pkg.version },
   async rewrites() {
     return [{ source: '/proxy/:path*', destination: `${API_URL}/:path*` }];

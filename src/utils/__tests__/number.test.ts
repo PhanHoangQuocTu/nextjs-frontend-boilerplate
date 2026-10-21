@@ -6,6 +6,7 @@ import {
   formatNumber,
   formatPercent,
   range,
+  roundTo,
   toNumber,
 } from '../number';
 
@@ -21,6 +22,13 @@ describe('number utils', () => {
     expect(clamp(-1, 0, 10)).toBe(0);
     expect(range(1, 4)).toEqual([1, 2, 3, 4]);
     expect(range(3, 1)).toEqual([]);
+  });
+
+  it('rounds decimal values without binary floating-point multiplication errors', () => {
+    expect(roundTo(1.005)).toBe(1.01);
+    expect(roundTo(-1.005)).toBe(-1);
+    expect(roundTo(-1.005, 2, 'floor')).toBe(-1.01);
+    expect(roundTo(1.001, 2, 'ceil')).toBe(1.01);
   });
 
   it('formatNumber', () => {

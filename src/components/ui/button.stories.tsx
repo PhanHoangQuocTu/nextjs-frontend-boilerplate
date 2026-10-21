@@ -7,6 +7,11 @@ const meta = {
   title: 'UI/Button',
   component: Button,
   args: { children: 'Button' },
+  render: ({ asChild, children, ...args }) => (
+    <Button {...args} asChild={asChild}>
+      {asChild ? <a href='#button-example'>{children}</a> : children}
+    </Button>
+  ),
   argTypes: {
     variant: { control: 'select', options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'] },
     size: { control: 'select', options: ['default', 'xs', 'sm', 'lg', 'icon', 'icon-xs', 'icon-sm', 'icon-lg'] },
@@ -18,6 +23,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const AsChild: Story = { args: { asChild: true } };
 
 export const Variants: Story = {
   render: () => (

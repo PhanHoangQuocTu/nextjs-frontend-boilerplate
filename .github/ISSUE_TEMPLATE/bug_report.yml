@@ -1,0 +1,28 @@
+name: Bug report
+description: Report a reproducible problem with the boilerplate.
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: Do not include secrets or undisclosed security vulnerabilities. See CONTRIBUTING.md for private reporting guidance.
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Describe the actual and expected behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include a minimal reproduction or repository if available.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include Node, pnpm, operating system, browser, and relevant logs.
+    validations:
+      required: true
