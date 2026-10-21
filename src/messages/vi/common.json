@@ -1,0 +1,41 @@
+{
+  "appName": "Frontend Boilerplate",
+  "language": "Ngôn ngữ",
+  "theme": {
+    "label": "Giao diện",
+    "light": "Sáng",
+    "dark": "Tối",
+    "system": "Theo hệ thống"
+  },
+  "actions": {
+    "retry": "Thử lại",
+    "refresh": "Làm mới",
+    "back": "Quay lại",
+    "backHome": "Về trang chủ",
+    "copy": "Sao chép",
+    "copied": "Đã sao chép"
+  },
+  "status": {
+    "loading": "Đang tải...",
+    "empty": "Chưa có dữ liệu",
+    "error": "Đã có lỗi xảy ra"
+  },
+  "home": {
+    "title": "Next.js frontend boilerplate",
+    "description": "Next.js 16, React 19, Tailwind v4, shadcn/ui, next-intl, TanStack Query và Zustand. Sẵn sàng cho dự án tiếp theo của bạn.",
+    "openHealth": "Mở trang health"
+  },
+  "notFound": {
+    "title": "Không tìm thấy trang",
+    "description": "Trang bạn tìm không tồn tại hoặc đã được di chuyển."
+  },
+  "error": {
+    "title": "Đã có lỗi xảy ra",
+    "description": "Có lỗi không mong muốn. Bạn có thể thử lại."
+  },
+  "seo": {
+    "siteName": "Frontend Boilerplate",
+    "defaultTitle": "Frontend Boilerplate: Next.js, shadcn/ui, i18n",
+    "description": "Boilerplate frontend Next.js sẵn sàng production với shadcn/ui, next-intl, TanStack Query, Zustand, Docker và CI."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "title": "System health",
+  "description": "Live status of this application.",
+  "status": {
+    "ok": "Operational"
+  },
+  "app": {
+    "title": "Application",
+    "environment": "Environment",
+    "version": "Version",
+    "uptime": "Uptime",
+    "checkedAt": "Last checked",
+    "latency": "Round-trip latency"
+  },
+  "proxy": {
+    "title": "Proxy example",
+    "description": "Posts fetched from the browser through the BFF route handler (/api/posts), which forwards to the backend.",
+    "empty": "No posts returned.",
+    "rewriteHint": "The same data is also reachable via the next.config rewrite at /proxy/posts."
+  },
+  "autoRefresh": "Auto-refresh every {seconds}s",
+  "error": "Could not load health status",
+  "statusLabel": "Status"
+}

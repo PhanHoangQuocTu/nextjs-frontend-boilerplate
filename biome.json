@@ -1,0 +1,348 @@
+{
+  "$schema": "node_modules/@biomejs/biome/configuration_schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "plugins": [],
+  "files": {
+    "ignoreUnknown": true,
+    "includes": [
+      "**",
+      "!node_modules",
+      "!**/.next",
+      "!**/dist",
+      "!**/public",
+      "!**/public/static",
+      "!**/static",
+      "!.github",
+      "!.vercel",
+      "!pnpm-lock.yaml",
+      "!bun.lock",
+      "!**/*.md",
+      "!**/*.mdx",
+      "!**/tailwind.css",
+      "!**/root.css",
+      "!**/*.grit",
+      "!**/scripts",
+      "!**/.turbo",
+      "!**/.vscode",
+      "!**/storybook-static",
+      "!**/coverage"
+    ]
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "lineEnding": "lf",
+    "indentWidth": 2,
+    "lineWidth": 120
+  },
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "off"
+      }
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "domains": {
+      "next": "recommended",
+      "react": "recommended"
+    },
+    "rules": {
+      "preset": "recommended",
+      "correctness": {
+        "noUnusedImports": "error",
+        "noUnusedVariables": "warn",
+        "useExhaustiveDependencies": "warn",
+        "noUnknownMediaFeatureName": "off",
+        "noUndeclaredVariables": "warn",
+        "noInvalidUseBeforeDeclaration": "error"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        "noUnusedTemplateLiteral": "off",
+        "noParameterAssign": "error",
+        "useAsConstAssertion": "error",
+        "useDefaultParameterLast": "error",
+        "useEnumInitializers": "error",
+        "useSelfClosingElements": "error",
+        "useSingleVarDeclarator": "error",
+        "useNumberNamespace": "error",
+        "noInferrableTypes": "error",
+        "noUselessElse": "warn",
+        "useConsistentArrayType": "error",
+        "useForOf": "warn",
+        "useShorthandAssign": "error",
+        "useTemplate": "warn",
+        "useCollapsedElseIf": "warn",
+        "useExponentiationOperator": "error",
+        "useConsistentBuiltinInstantiation": "error",
+        "useFilenamingConvention": {
+          "level": "off",
+          "options": {
+            "filenameCases": ["kebab-case", "camelCase"],
+            "strictCase": false
+          }
+        },
+        "noNestedTernary": "error",
+        "noRestrictedImports": {
+          "level": "error",
+          "options": {
+            "paths": {
+              "next-intl": {
+                "importNames": ["useTranslations"],
+                "message": "Use `useTranslations` from '@/hooks': it is typed against src/messages."
+              },
+              "next-intl/server": {
+                "importNames": ["getTranslations"],
+                "message": "Use `useTranslationsServer` from '@/hooks/useTranslationsServer': it is typed against src/messages."
+              }
+            }
+          }
+        }
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off",
+        "noUnknownAtRules": "off",
+        "noExplicitAny": "off",
+        "noEmptyBlockStatements": "warn",
+        "noDoubleEquals": "error",
+        "noDebugger": "warn",
+        "noGlobalIsFinite": "error",
+        "noGlobalIsNan": "error",
+        "noMisleadingCharacterClass": "error",
+        "noPrototypeBuiltins": "warn",
+        "noSelfCompare": "error",
+        "noSparseArray": "error",
+        "useAwait": "off"
+      },
+      "complexity": {
+        "noForEach": "off",
+        "useSimplifiedLogicExpression": "off",
+        "useFlatMap": "warn"
+      },
+      "security": {
+        "noGlobalEval": "error",
+        "noDangerouslySetInnerHtml": "warn",
+        "noDangerouslySetInnerHtmlWithChildren": "error"
+      },
+      "a11y": {
+        "useValidAnchor": "off",
+        "useAltText": "error",
+        "useButtonType": "error",
+        "useValidAriaProps": "error",
+        "useValidAriaRole": "error",
+        "useValidAriaValues": "error",
+        "noAriaUnsupportedElements": "error",
+        "noAutofocus": "off",
+        "noDistractingElements": "error",
+        "noRedundantAlt": "error",
+        "useSemanticElements": "off",
+        "noStaticElementInteractions": "off",
+        "useKeyWithClickEvents": "off"
+      },
+      "performance": {
+        "noImgElement": "warn"
+      },
+      "nursery": {
+        "useSortedClasses": {
+          "level": "error",
+          "fix": "safe",
+          "options": {
+            "attributes": ["className"],
+            "functions": ["cx"]
+          }
+        }
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "enabled": true,
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "es5",
+      "jsxQuoteStyle": "single"
+    }
+  },
+  "json": {
+    "parser": {
+      "allowComments": true
+    }
+  },
+  "css": {
+    "linter": {
+      "enabled": true
+    },
+    "formatter": {
+      "enabled": true
+    },
+    "parser": {
+      "cssModules": true,
+      "tailwindDirectives": true
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["**/*.css"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnknownFunction": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.jsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useImportType": "error"
+          },
+          "correctness": {
+            "useJsxKeyInIterable": "error"
+          },
+          "a11y": {
+            "useValidAnchor": "error",
+            "useKeyWithClickEvents": "error",
+            "useKeyWithMouseEvents": "error"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useImportType": "error",
+            "useExportType": "error",
+            "useConsistentArrayType": "error"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
+          },
+          "correctness": {
+            "noUndeclaredVariables": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useImportType": "error",
+            "useExportType": "error",
+            "useConsistentArrayType": "error"
+          },
+          "correctness": {
+            "useJsxKeyInIterable": "error",
+            "noUndeclaredVariables": "off"
+          },
+          "suspicious": {
+            "noExplicitAny": "off"
+          },
+          "a11y": {
+            "useValidAnchor": "error",
+            "useKeyWithClickEvents": "error",
+            "useKeyWithMouseEvents": "error"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["app/**/*.tsx", "app/**/*.ts", "app/**/*.jsx", "app/**/*.js"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
+          },
+          "suspicious": {
+            "useAwait": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/*.module.css"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnknownProperty": "off"
+          },
+          "style": {
+            "noDescendingSpecificity": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["styles/css/root.css"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noDuplicateCustomProperties": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/components/ui/**"],
+      "linter": {
+        "rules": {
+          "security": {
+            "noDangerouslySetInnerHtml": "off"
+          },
+          "suspicious": {
+            "noDocumentCookie": "off"
+          },
+          "a11y": {
+            "useFocusableInteractive": "off",
+            "useKeyWithClickEvents": "off",
+            "useAriaPropsForRole": "off"
+          },
+          "style": {
+            "noNestedTernary": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/app/**/error.tsx"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noShadowRestrictedNames": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/app/**", "src/lib/**"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "useHookAtTopLevel": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/hooks/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noRestrictedImports": "off"
+          }
+        }
+      }
+    }
+  ]
+}

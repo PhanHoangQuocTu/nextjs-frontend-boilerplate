@@ -1,0 +1,24 @@
+{
+  "title": "Tình trạng hệ thống",
+  "description": "Trạng thái trực tiếp của ứng dụng.",
+  "status": {
+    "ok": "Hoạt động"
+  },
+  "app": {
+    "title": "Ứng dụng",
+    "environment": "Môi trường",
+    "version": "Phiên bản",
+    "uptime": "Thời gian chạy",
+    "checkedAt": "Kiểm tra lần cuối",
+    "latency": "Độ trễ khứ hồi"
+  },
+  "proxy": {
+    "title": "Ví dụ proxy",
+    "description": "Danh sách bài viết lấy từ trình duyệt qua route handler BFF (/api/posts), sau đó chuyển tiếp tới backend.",
+    "empty": "Không có bài viết nào.",
+    "rewriteHint": "Cùng dữ liệu này cũng truy cập được qua rewrite trong next.config tại /proxy/posts."
+  },
+  "autoRefresh": "Tự làm mới mỗi {seconds}s",
+  "error": "Không thể tải trạng thái health",
+  "statusLabel": "Trạng thái"
+}

@@ -1,0 +1,41 @@
+{
+  "appName": "Frontend Boilerplate",
+  "language": "Language",
+  "theme": {
+    "label": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "actions": {
+    "retry": "Retry",
+    "refresh": "Refresh",
+    "back": "Back",
+    "backHome": "Back to home",
+    "copy": "Copy",
+    "copied": "Copied"
+  },
+  "status": {
+    "loading": "Loading...",
+    "empty": "Nothing here yet",
+    "error": "Something went wrong"
+  },
+  "home": {
+    "title": "Next.js frontend boilerplate",
+    "description": "Next.js 16, React 19, Tailwind v4, shadcn/ui, next-intl, TanStack Query and Zustand. Ready for your next project.",
+    "openHealth": "Open health page"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you are looking for does not exist or has been moved."
+  },
+  "error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error occurred. You can try again."
+  },
+  "seo": {
+    "siteName": "Frontend Boilerplate",
+    "defaultTitle": "Frontend Boilerplate: Next.js, shadcn/ui, i18n",
+    "description": "Production-ready Next.js frontend boilerplate with shadcn/ui, next-intl, TanStack Query, Zustand, Docker and CI."
+  }
+}

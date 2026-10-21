@@ -1,0 +1,95 @@
+# Generic GitLab CI pipeline: install -> quality (lint, types, tests) -> build -> docker image.
+# Adjust `tags`, registry and deploy stages to your own infrastructure.
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
+stages:
+  - quality
+  - build
+  - dockerize
+
+variables:
+  NODE_IMAGE: node:22-alpine
+  PNPM_STORE_DIR: .pnpm-store
+  NEXT_TELEMETRY_DISABLED: '1'
+
+default:
+  image: $NODE_IMAGE
+  cache:
+    key:
+      files:
+        - pnpm-lock.yaml
+    paths:
+      - .pnpm-store
+    policy: pull-push
+  before_script:
+    - corepack enable
+    - pnpm config set store-dir $PNPM_STORE_DIR
+    - pnpm install --frozen-lockfile
+
+lint:
+  stage: quality
+  script:
+    - pnpm lint
+    - pnpm format:check
+
+type-check:
+  stage: quality
+  script:
+    - pnpm type-check
+
+unit-test:
+  stage: quality
+  script:
+    - pnpm test:coverage
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+
+build:
+  stage: build
+  script:
+    - cp .env.example .env
+    - pnpm build
+  artifacts:
+    expire_in: 1 day
+    paths:
+      - .next/standalone
+      - .next/static
+
+storybook:
+  stage: build
+  script:
+    - pnpm build-storybook
+  artifacts:
+    expire_in: 1 week
+    paths:
+      - storybook-static
+
+# Build and push the production image to the GitLab Container Registry.
+# Runs on the default branch and on tags. Needs a runner that allows Kaniko / Docker.
+dockerize:
+  stage: dockerize
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: ['']
+  cache: []
+  before_script: []
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_TAG
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(printf '%s:%s' "$CI_REGISTRY_USER" "$CI_REGISTRY_PASSWORD" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - >-
+      /kaniko/executor
+      --context "$CI_PROJECT_DIR"
+      --dockerfile "$CI_PROJECT_DIR/docker/Dockerfile"
+      --build-arg NEXT_PUBLIC_APP_ENV="${NEXT_PUBLIC_APP_ENV:-production}"
+      --build-arg NEXT_PUBLIC_APP_URL="${NEXT_PUBLIC_APP_URL:-}"
+      --build-arg NEXT_PUBLIC_API_URL="${NEXT_PUBLIC_API_URL:-}"
+      --destination "$CI_REGISTRY_IMAGE:${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}"
+      --destination "$CI_REGISTRY_IMAGE:latest"
