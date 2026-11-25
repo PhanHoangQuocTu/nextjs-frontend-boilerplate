@@ -32,7 +32,8 @@ function verifySnapshot(commit) {
       indexEnv = { ...process.env, GIT_INDEX_FILE: join(directory, 'index') };
       git(['read-tree', commit], { env: indexEnv });
     }
-    git(['checkout-index', '--all', `--prefix=${workingTree}${sep}`], { env: indexEnv });
+    // Git expects forward slashes in checkout-index prefixes on Windows too.
+    git(['checkout-index', '--all', `--prefix=${workingTree.split(sep).join('/')}/`], { env: indexEnv });
     console.log(`Verifying ${commit ?? 'staged files'} in an isolated checkout.`);
     pnpm(['install', '--frozen-lockfile', '--prefer-offline'], workingTree);
     pnpm(['verify'], workingTree);

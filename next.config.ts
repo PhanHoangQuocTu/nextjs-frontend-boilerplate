@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
   agentRules: false,
   reactStrictMode: true,
   output: 'standalone',
+  // Preserve the request origin for next-intl rewrites, including loopback IPs.
+  skipProxyUrlNormalize: true,
   compress: true,
   poweredByHeader: false,
   experimental: { globalNotFound: true },

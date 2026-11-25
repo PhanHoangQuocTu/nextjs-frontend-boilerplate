@@ -23,7 +23,7 @@ let foundWarning = false;
 function watch(stream, destination) {
   let pending = '';
   const warning =
-    /^\s*[│┃]?\s*(?:⚠|\[WARN(?:ING)?\]|\(!\)|WARN(?:ING)?\b|.+\bWarning\s+\[[\w-]+\]|\(node:\d+\)\s+(?:\[[^\]]+\]\s+)?\w*Warning\b)/i;
+    /^\s*[│┃]?\s*(?:⚠|▲\s+Vite\b|\[WARN(?:ING)?\]|\(!\)|WARN(?:ING)?\b|.+\bWarning\s+\[[\w-]+\]|\(node:\d+\)\s+(?:\[[^\]]+\]\s+)?\w*Warning\b)/i;
   const check = (line) => {
     if (warning.test(stripVTControlCharacters(line))) foundWarning = true;
   };

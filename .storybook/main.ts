@@ -16,6 +16,8 @@ const config: StorybookConfig = {
       chunkSizeWarningLimit: 4000,
       rolldownOptions: {
         ...config.build?.rolldownOptions,
+        // Storybook's transforms provide Docs and Controls. Their timings are a profiling diagnostic.
+        checks: { ...config.build?.rolldownOptions?.checks, bundlerTimings: false },
         // Radix / Base UI ship `'use client'` directives; they are meaningless in a plain Vite bundle.
         onLog(level, log, defaultHandler) {
           if (log.code === 'MODULE_LEVEL_DIRECTIVE') return;
