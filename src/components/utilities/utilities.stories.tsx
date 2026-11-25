@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { FadeIn, HStack, Show, VStack } from '.';
 
 const Box = ({ children }: { children: React.ReactNode }) => (
-  <div className='rounded-md border bg-muted px-3 py-2 text-sm'>{children}</div>
+  <div className='bg-muted rounded-md border px-3 py-2 text-sm'>{children}</div>
 );
 
 const meta = { title: 'Utilities/Layout', parameters: { layout: 'padded' } } satisfies Meta;

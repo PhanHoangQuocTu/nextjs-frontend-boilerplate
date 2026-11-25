@@ -8,6 +8,11 @@ import {
   webSiteJsonLd,
 } from '../seo';
 
+vi.mock('@/constants/env', () => ({
+  env: { APP_URL: 'http://localhost:3000' },
+  isProductionEnv: false,
+}));
+
 vi.mock('@/hooks/useTranslationsServer', () => ({
   useTranslationsServer: async () => ({ t: (key: string) => (key === 'siteName' ? 'Boilerplate' : key), locale: 'en' }),
 }));

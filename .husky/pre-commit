@@ -1,1 +1,1 @@
-pnpm dlx lint-staged --allow-empty
+pnpm exec lint-staged --allow-empty && node scripts/verify-git-snapshot.mjs staged

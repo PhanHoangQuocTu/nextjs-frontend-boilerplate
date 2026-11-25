@@ -9,7 +9,7 @@ export const Header = async () => {
   const { t } = await useTranslationsServer('common');
 
   return (
-    <header className='sticky top-0 z-40 border-b bg-background/80 backdrop-blur'>
+    <header className='bg-background/80 sticky top-0 z-40 border-b backdrop-blur'>
       <div className='mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-4 px-4'>
         <Link href={ROUTES.HOME} className='font-semibold tracking-tight'>
           {t('appName')}

@@ -1,24 +1,26 @@
-# syntax=docker/dockerfile:1.7
-ARG NODE_VERSION=22
+# syntax=docker/dockerfile:1
+ARG NODE_VERSION=26.13.1
+
+FROM node:${NODE_VERSION}-alpine AS toolchain
+WORKDIR /app
+COPY package.json ./
+RUN npm install --global --ignore-scripts --no-audit --no-fund --no-update-notifier "$(node -p "require('./package.json').packageManager")"
 
 # ---- deps: install with a cached pnpm store ---------------------------------
-FROM node:${NODE_VERSION}-alpine AS deps
-RUN corepack enable
-WORKDIR /app
+FROM toolchain AS deps
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN --mount=type=cache,id=pnpm,target=/root/.local/share/pnpm/store \
-    pnpm install --frozen-lockfile --ignore-scripts
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    HUSKY=0 pnpm install --frozen-lockfile --store-dir=/pnpm/store
 
 # ---- builder ----------------------------------------------------------------
-FROM node:${NODE_VERSION}-alpine AS builder
-RUN corepack enable
-WORKDIR /app
+FROM toolchain AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # NEXT_PUBLIC_* values are inlined at build time, so they must be build args.
 ARG NEXT_PUBLIC_APP_ENV=production
 ARG NEXT_PUBLIC_APP_URL=http://localhost:3000
+# Replace or remove the JSONPlaceholder default when removing the posts demo.
 ARG NEXT_PUBLIC_API_URL=https://jsonplaceholder.typicode.com
 ENV NEXT_PUBLIC_APP_ENV=$NEXT_PUBLIC_APP_ENV \
     NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL \

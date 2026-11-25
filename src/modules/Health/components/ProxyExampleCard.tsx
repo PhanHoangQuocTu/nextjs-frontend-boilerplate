@@ -14,14 +14,14 @@ export const ProxyExampleCard = () => {
 
   const renderContent = () => {
     if (isLoading) return Array.from({ length: 3 }, (_, idx) => <Skeleton key={idx} className='h-5 w-full' />);
-    if (error) return <ErrorState title={error.message} />;
+    if (error) return <ErrorState title={t('error')} />;
     if (!data?.length) return <p className='text-muted-foreground text-sm'>{t('empty')}</p>;
 
     return (
       <ul className='divide-y text-sm'>
         {data.map((post) => (
           <li key={post.id} className='py-2'>
-            <span className='mr-2 text-muted-foreground'>#{post.id}</span>
+            <span className='text-muted-foreground mr-2'>#{post.id}</span>
             {post.title}
           </li>
         ))}
@@ -37,7 +37,7 @@ export const ProxyExampleCard = () => {
       </CardHeader>
       <CardContent className='space-y-3'>
         {renderContent()}
-        <p className='text-muted-foreground text-xs'>{t('rewriteHint')}</p>
+        <p className='text-muted-foreground text-xs'>{t('proxyHint')}</p>
       </CardContent>
     </Card>
   );

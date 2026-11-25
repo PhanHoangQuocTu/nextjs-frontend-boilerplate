@@ -18,7 +18,7 @@ const withProviders: Decorator = (Story, context) => {
     <NextIntlClientProvider locale={locale} messages={messages[locale]}>
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <div className='font-sans text-foreground antialiased'>
+          <div className='text-foreground font-sans antialiased'>
             <Story />
           </div>
         </TooltipProvider>

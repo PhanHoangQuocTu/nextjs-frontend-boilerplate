@@ -7,9 +7,9 @@ import { cn } from '@/lib/utils';
 const hStackVariants = cva('flex flex-wrap items-center', {
   variants: {
     justify: {
-      start: 'justify-start ',
-      end: 'justify-end ',
-      center: 'justify-center ',
+      start: 'justify-start',
+      end: 'justify-end',
+      center: 'justify-center',
       between: 'justify-between',
       around: 'justify-around',
       evenly: 'justify-evenly',

@@ -12,7 +12,7 @@ export const Widescreen: Story = {
     <div className='w-72'>
       <AspectRatio
         ratio={16 / 9}
-        className='flex items-center justify-center rounded-lg bg-muted text-muted-foreground text-sm'
+        className='bg-muted text-muted-foreground flex items-center justify-center rounded-lg text-sm'
       >
         16 / 9
       </AspectRatio>

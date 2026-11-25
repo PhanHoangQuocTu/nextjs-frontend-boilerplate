@@ -7,10 +7,11 @@ services:
         # NEXT_PUBLIC_* are baked into the bundle at build time.
         NEXT_PUBLIC_APP_ENV: ${NEXT_PUBLIC_APP_ENV:-production}
         NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:8080}
+        # Replace or remove the JSONPlaceholder default when removing the posts demo.
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://jsonplaceholder.typicode.com}
     restart: unless-stopped
     healthcheck:
-      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:3000/api/health']
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -19,7 +20,7 @@ services:
   nginx:
     build: ./docker/nginx
     ports:
-      - '8080:8080'
+      - "8080:8080"
     depends_on:
       frontend:
         condition: service_healthy

@@ -4,8 +4,8 @@ Thank you for helping improve the boilerplate. For a substantial change, open an
 
 ## Get started
 
-1. Install Node.js 22 and enable Corepack. The package manager version is pinned in `package.json`.
-2. Fork and clone the repository, then run `pnpm install`.
+1. Install the Node LTS version in `.nvmrc` and the pnpm version pinned in `package.json` using the README quick start.
+2. Fork and clone the repository, then run `pnpm install --frozen-lockfile`.
 3. Copy `.env.example` to `.env.local` and run `pnpm dev`. Run `pnpm storybook` for component work.
 4. Create a branch, make your changes, and add tests or stories where appropriate.
 
@@ -16,15 +16,14 @@ The [README](README.md) describes the architecture, commands, translations, API 
 Run these commands before opening a pull request:
 
 ```bash
-pnpm lint
-pnpm format:check
-pnpm type-check
-pnpm test
+pnpm verify
 ```
 
-Also run `pnpm build` for route, configuration, metadata, or environment changes, and `pnpm build-storybook` for component or story changes. Check affected UI in a browser, including its console. Changes to translations must update every supported locale and preserve matching ICU placeholders.
+Run `pnpm build-storybook` for component, story or UI dependency changes. Check affected UI in a browser, including its console. For route, API or SEO changes, verify HTTP status, redirects and rendered metadata in the relevant locales. Changes to translations must update every supported locale and preserve matching ICU placeholders.
 
-Commits use the Conventional Commits format described in [commit-message-instructions.md](commit-message-instructions.md). Husky runs the configured hooks on commit. Do not commit secrets or local `.env` files.
+Husky applies safe fixes to staged files before running `pnpm verify` on a temporary checkout of the index. Before push it checks each distinct outgoing branch or tag tip. The checks use the lockfile in each snapshot and can download missing dependencies. Export any required build environment values in your shell. Keep local `.env` files out of Git. Commits use the format in [commit-message-instructions.md](commit-message-instructions.md).
+
+Set the CI quality and image checks as required on protected branches when adopting the repo.
 
 ## Reporting problems
 

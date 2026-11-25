@@ -1,0 +1,1 @@
+node scripts/verify-git-snapshot.mjs outgoing

@@ -1,24 +1,32 @@
 # AGENTS.md
 
 Instructions for AI coding agents (Codex, Claude Code and others) working in this repository.
-Claude Code reads `CLAUDE.md`, which imports this file. Keep the two in sync by editing only this one.
+Claude Code reads `CLAUDE.md`, which imports this file. Put shared instructions here.
 
 ## What this repo is
 
 A reusable **Next.js 16 frontend boilerplate**: App Router, React 19, TypeScript 7 (strict), Tailwind v4, shadcn/ui, next-intl (`en`, `vi`), TanStack Query, Zustand, Storybook, Vitest, Docker, CI. It has no product features. `src/modules/Health` and `src/api/posts` are examples to copy, not code to extend.
 
+## Agent workflow
+
+1. Read the relevant code, tests and local instructions. For Next.js changes, check `node_modules/next/dist/docs/` for the installed version before choosing an API or file convention. Use the official documentation for that version if the bundled copy is unavailable.
+2. Establish the scope and acceptance criteria from the request and evidence. If a material requirement is missing or conflicting, ask a focused question and wait before changing that part. This includes backend contracts, authorization, data changes, cache semantics, indexability and deployment behavior. Continue independent work with clear requirements.
+3. For changes across multiple layers, state the plan, affected entry points and how you will verify them. Reuse existing patterns and cover success, invalid input and failure at the affected boundaries.
+4. Run the applicable checks below, read their output and report actual results, warnings and blockers. For development servers, use browser evidence and the Next.js runtime tooling when available. Stop any server you started.
+
 ## Commands
 
-Package manager is **pnpm 12** (pinned in `package.json`, enable with `corepack enable`). Node 22.
+Use the Node LTS version in `.nvmrc` and the pnpm version in `package.json`. The README documents how to install both.
 
 | Task | Command |
 | --- | --- |
-| Install | `pnpm install` |
+| Install | `pnpm install --frozen-lockfile` |
 | Dev server | `pnpm dev` (<http://localhost:3000>, copy `.env.example` to `.env.local` first) |
 | Lint / format | `pnpm lint`, `pnpm format:check`, fix with `pnpm lint:fix` and `pnpm format:fix` |
 | Types | `pnpm type-check` |
 | Tests | `pnpm test` (one file: `pnpm exec vitest run path/to/file.test.ts`) |
-| Everything quick | `pnpm check` (lint + type-check + test) |
+| Quick quality checks | `pnpm check` (lint, format, types and tests) |
+| Commit and push checks | `pnpm verify` (quality checks and production build) |
 | Production build | `pnpm build` |
 | Storybook | `pnpm storybook` (port 6006), `pnpm build-storybook` |
 
@@ -28,9 +36,9 @@ Run commands non-interactively. Do not start long-running servers without stoppi
 
 Before saying a change is finished, run and read the output of:
 
-1. `pnpm lint`, `pnpm format:check`, `pnpm type-check`, `pnpm test`
-2. `pnpm build` when routes, config, metadata or env changed
-3. `pnpm build-storybook` when a component or story changed
+1. Run `pnpm verify` for source, configuration and dependency changes.
+2. Run `pnpm build-storybook` for changes to components, stories or their dependencies.
+3. For routes, locale, BFF or SEO changes, check the affected paths in both locales as applicable. Verify redirects, HTTP status, relevant headers, rendered metadata and network requests. Use a local fixture for the upstream response when possible.
 
 The project must stay at **zero errors and zero warnings** in all of these and in the browser console. A change that only "works" while printing warnings is not done. For UI changes, open the page (or the story) in a browser and check the console.
 
@@ -77,6 +85,8 @@ src/proxy.ts        next-intl locale negotiation (Next 16 renamed middleware.ts 
 
 - The browser never calls the real backend. Browser code uses `getApiRequestClient()` (BFF at `/api/*`); server code uses the direct `request` client. The real URL is `NEXT_PUBLIC_API_URL`.
 - New domain: `src/api/<domain>/{keys,requests,queries,mutations,type,index}.ts` plus a mirroring Route Handler `src/app/api/<domain>/route.ts`. Copy `src/api/posts`.
+- Validate parameters and bodies in Route Handlers, check authorization where protected data is accessed, and forward only the headers required by the upstream contract. Use `src/proxy.ts` for locale negotiation and lightweight request routing. Keep upstream calls and authorization in the relevant Route Handler or server code.
+- `/proxy/posts` is a read-only alias for the bundled demo. The README lists the posts files and JSONPlaceholder configuration to remove or replace when adopting this boilerplate.
 - Errors reaching callers are normalised `IApiError` (`status`, `message`, `code`, `details`).
 - Token refresh is opt-in through `setRefreshTokenHandler`. There is no auth provider by design.
 
@@ -84,11 +94,12 @@ src/proxy.ts        next-intl locale negotiation (Next 16 renamed middleware.ts 
 
 - Every page exports `generateMetadata` that returns `buildMetadata({ locale, path, title, description, noIndex? })` from `src/lib/seo.ts`. Do not hand-write `openGraph` or `alternates`: Next replaces nested objects, so partial ones lose data.
 - Indexable pages must be added to `INDEXABLE_ROUTES` in `src/constants/routes.ts` (feeds `sitemap.ts`). Operational or private pages pass `noIndex: true`.
-- Non-production environments are `noindex` automatically. OG and Twitter image route handlers live in `src/app/opengraph-image/` and `src/app/twitter-image/`, outside `[locale]`.
+- Non-production environments are `noindex` automatically and publish an empty sitemap. Check that canonical URLs, reciprocal `hreflang` (including `x-default`), and sitemap entries agree in production. Use accurate content modification dates when they are available.
+- OG and Twitter image route handlers live in `src/app/opengraph-image/` and `src/app/twitter-image/`, outside `[locale]`. Verify share metadata and use JSON-LD where the page content supports it.
 
 ## shadcn/ui and Storybook
 
-- Add components with `pnpm dlx shadcn@latest add <name> --overwrite`. Afterwards run `pnpm exec biome lint . --write --unsafe && pnpm exec biome format . --write`.
+- Add components with `pnpm dlx shadcn@4.23.0 add <name>`. Review the diff before overwriting an existing component, then run `pnpm lint:fix` and `pnpm format:fix`.
 - The CLI may write `from "cn"` imports: change to `@/lib/utils` and make sure no `cn` package lands in `package.json`.
 - `src/components/ui/sonner.tsx` must import `useTheme` from `@/components/providers/ThemeProvider` (first-party provider; `next-themes` was removed on purpose). Re-apply after overwriting.
 - Do not hand-edit `ui/` files for app behaviour; wrap them in `src/components` instead.
@@ -103,7 +114,7 @@ Only three variables exist: `NEXT_PUBLIC_APP_ENV`, `NEXT_PUBLIC_APP_URL`, `NEXT_
 
 - Use `bignumber.js` for precision-sensitive decimal arithmetic (especially money), not JavaScript floating-point operators. Construct values from decimal strings, keep results as BigNumber or strings, and choose division precision and rounding explicitly per domain. Never mutate global BigNumber configuration; use `BigNumber.clone` for domain-specific settings. Check division by zero and validate inputs at the boundary. `src/utils/number.ts` formatting helpers return `number` or display text and are not a substitute for exact arithmetic.
 - TypeScript 7: incremental builds ignore JSON edits, so `type-check` runs with `--incremental false`. Do not remove that flag. It also runs `next typegen` first so a fresh checkout has the generated `next/root-params` types. In an editor, "Restart TS Server" clears stale translation errors.
-- pnpm 12 rejects packages published less than a day ago and blocks install scripts. New build scripts need an entry in `pnpm-workspace.yaml` (`allowBuilds`). If a fresh release is rejected, pin the previous version. `@types/node` stays on the Node major used at runtime (22).
+- pnpm 12 normally rejects packages published less than a day ago and blocks dependency install scripts. Review `allowBuilds` before enabling a script. When upgrading, compare all direct dependencies with stable npm releases and check peers before changing the lockfile. Keep `@types/node` on the target Node major.
 - `next build` rewrites `tsconfig.json` when it disagrees with Next's required settings; keep the committed file as is.
 - Biome is relaxed only for `src/components/ui/**`, `src/app/**` and `src/lib/**` (see `biome.json`), do not widen it.
 - Do not kill processes with `pkill -f <pattern>` from a shell whose own command line contains that pattern; kill by PID or port.
@@ -116,10 +127,10 @@ Vitest + Testing Library (jsdom). Put tests in `__tests__/` next to the code. Pu
 
 - Conventional Commits, enforced by commitlint: `type(scope): subject`, lowercase, imperative, header under 100 characters, English, no trailing period. Types: feat, fix, docs, chore, style, refactor, ci, test, revert, perf, release. See `commit-message-instructions.md`.
 - **Never add `Co-Authored-By` trailers or any AI attribution** (no "Generated with ..." lines) to commits, PR descriptions or code.
-- Do not commit, push, amend or rewrite history unless the user asks. Husky runs lint-staged and commitlint on commit; never bypass hooks with `--no-verify`.
+- Do not commit, push, amend or rewrite history unless the user asks. Husky auto-fixes staged files, runs `pnpm verify` against the staged index, checks the commit message, and verifies the outgoing revisions before push. Keep the same checks in CI and let Husky run when making commits or pushes.
 - Default branch is `main`. Do not touch `legacy-main` or the `gitlab` remote.
 
 ## Codex-specific notes
 
 - Prefer targeted commands (`pnpm exec vitest run <file>`) while iterating, then the full definition of done once.
-- The sandbox may block network access. `pnpm install`, `pnpm dlx shadcn@latest` and the demo API (`jsonplaceholder.typicode.com`) need it; if blocked, say so instead of faking results.
+- The sandbox may block npm downloads and the demo API. Report any checks that cannot run and their actual errors.

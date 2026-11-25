@@ -16,7 +16,8 @@
     "title": "Ví dụ proxy",
     "description": "Danh sách bài viết lấy từ trình duyệt qua route handler BFF (/api/posts), sau đó chuyển tiếp tới backend.",
     "empty": "Không có bài viết nào.",
-    "rewriteHint": "Cùng dữ liệu này cũng truy cập được qua rewrite trong next.config tại /proxy/posts."
+    "error": "Không thể tải bài viết mẫu.",
+    "proxyHint": "Bạn cũng có thể truy cập dữ liệu này tại /proxy/posts."
   },
   "autoRefresh": "Tự làm mới mỗi {seconds}s",
   "error": "Không thể tải trạng thái health",

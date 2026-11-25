@@ -31,7 +31,7 @@ export default async function HomePage() {
   return (
     <MainLayout>
       <FadeIn as='section' className='mx-auto flex max-w-2xl flex-col items-center gap-6 py-16 text-center'>
-        <h1 className='font-semibold text-4xl tracking-tight'>{t('title')}</h1>
+        <h1 className='text-4xl font-semibold tracking-tight'>{t('title')}</h1>
         <p className='text-muted-foreground'>{t('description')}</p>
         <Button asChild>
           <Link href={ROUTES.HEALTH}>

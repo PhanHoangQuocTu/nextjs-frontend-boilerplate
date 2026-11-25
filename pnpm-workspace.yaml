@@ -1,6 +1,15 @@
 # Dependency build scripts. Only list packages that must run an install script.
 # `false` = reviewed and intentionally skipped (their native prebuilds / JS fallbacks are enough).
 allowBuilds:
-  '@parcel/watcher': false
-  '@swc/core': false
+  "@parcel/watcher": false
+  "@swc/core": false
   esbuild: false
+
+# With Vite 8, Storybook uses its native TS path resolver instead of tsconfck's TypeScript 5 parser.
+# Revisit this exception when the Next.js adapter removes the older Vite path resolver.
+allowedDeprecatedVersions:
+  tsconfck: "3.1.6"
+peerDependencyRules:
+  allowedVersions:
+    "tsconfck@3.1.6>typescript": "7.0.2"
+strictPeerDependencies: true

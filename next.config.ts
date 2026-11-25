@@ -5,22 +5,14 @@ import pkg from './package.json' with { type: 'json' };
 
 const isProductionEnv = process.env.NEXT_PUBLIC_APP_ENV === 'production';
 
-/**
- * Backend origin used by the `/proxy/*` rewrite: a zero-code alternative to Route Handlers.
- * The browser calls `/proxy/...` on this origin, so CORS never applies.
- */
-const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://jsonplaceholder.typicode.com').replace(/\/$/, '');
-
 const nextConfig: NextConfig = {
+  agentRules: false,
   reactStrictMode: true,
   output: 'standalone',
   compress: true,
   poweredByHeader: false,
   experimental: { globalNotFound: true },
   env: { APP_VERSION: pkg.version },
-  async rewrites() {
-    return [{ source: '/proxy/:path*', destination: `${API_URL}/:path*` }];
-  },
   async headers() {
     const security = [
       { key: 'X-Content-Type-Options', value: 'nosniff' },

@@ -8,7 +8,7 @@ const envSchema = z.object({
   APP_ENV: z.enum(AppEnv).default(AppEnv.DEVELOPMENT),
   /** Public origin of this app. Used for canonical URLs, sitemap and Open Graph. */
   APP_URL: z.string().default('http://localhost:3000'),
-  /** Backend origin the BFF route handlers and the `/proxy/*` rewrite forward to. */
+  /** Backend origin for BFF calls. Replace or remove the JSONPlaceholder default when removing the posts demo. */
   API_URL: z.string().default('https://jsonplaceholder.typicode.com'),
   /** Injected by `next.config.ts` from package.json. */
   APP_VERSION: z.string().default('0.0.0'),

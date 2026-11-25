@@ -4,7 +4,7 @@ export const Footer = async () => {
   const { t } = await useTranslationsServer('common');
 
   return (
-    <footer className='border-t py-6 text-center text-muted-foreground text-sm'>
+    <footer className='text-muted-foreground border-t py-6 text-center text-sm'>
       © {new Date().getFullYear()} {t('appName')}
     </footer>
   );

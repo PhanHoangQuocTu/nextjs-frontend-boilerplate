@@ -25,7 +25,6 @@
       "!**/tailwind.css",
       "!**/root.css",
       "!**/*.grit",
-      "!**/scripts",
       "!**/.turbo",
       "!**/.vscode",
       "!**/storybook-static",
@@ -149,13 +148,9 @@
         "noImgElement": "warn"
       },
       "nursery": {
-        "useSortedClasses": {
+        "useTailwindSortedClasses": {
           "level": "error",
-          "fix": "safe",
-          "options": {
-            "attributes": ["className"],
-            "functions": ["cx"]
-          }
+          "fix": "safe"
         }
       }
     }
